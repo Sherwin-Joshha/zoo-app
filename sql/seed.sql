@@ -1,0 +1,126 @@
+USE zoo_management;
+
+-- 2 users (1 visitor, 1 admin) with bcrypt hashed passwords ('password123')
+INSERT INTO users (name, email, password_hash, role) VALUES
+('Admin User', 'admin@zoo.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'admin'),
+('Visitor One', 'visitor@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'visitor');
+
+-- 5 zones
+INSERT INTO zones (zone_name, description, lat, lng) VALUES
+('Savanna', 'Vast open plains home to majestic mammals.', 34.0522, -118.2437),
+('Aquatic', 'Underwater worlds with fascinating sea creatures.', 34.0530, -118.2440),
+('Aviary', 'A large netted enclosure for diverse bird species.', 34.0515, -118.2430),
+('Jungle', 'Dense foliage and high humidity for tropical species.', 34.0540, -118.2450),
+('Reptile House', 'Climate-controlled habitats for cold-blooded reptiles.', 34.0550, -118.2460);
+
+-- 25 bird species and 25 animal (mammal) species
+INSERT INTO animals (name, species, category, habitat, lifespan, diet, zone, fun_fact) VALUES
+-- Birds (25)
+('Bald Eagle', 'Haliaeetus leucocephalus', 'bird', 'Forests near water', 20, 'Fish', 'Aviary', 'They build some of the largest bird nests.'),
+('Ostrich', 'Struthio camelus', 'bird', 'Savanna', 50, 'Omnivore', 'Savanna', 'The largest living bird species.'),
+('Emperor Penguin', 'Aptenodytes forsteri', 'bird', 'Antarctic ice', 20, 'Fish', 'Aquatic', 'They can dive to depths of 1,500 feet.'),
+('Macaw', 'Ara', 'bird', 'Rainforest', 50, 'Seeds and fruits', 'Jungle', 'Macaws are highly intelligent and social.'),
+('Flamingo', 'Phoenicopteridae', 'bird', 'Alkaline lakes', 30, 'Algae and crustaceans', 'Aquatic', 'They get their pink color from their food.'),
+('Peacock', 'Pavo cristatus', 'bird', 'Forest', 15, 'Omnivore', 'Aviary', 'Only the males have the beautiful tail feathers.'),
+('Toucan', 'Ramphastidae', 'bird', 'Tropical rainforest', 20, 'Fruits', 'Jungle', 'Their large bill is actually very light.'),
+('Snowy Owl', 'Bubo scandiacus', 'bird', 'Tundra', 10, 'Lemmings', 'Aviary', 'They are active during the daytime.'),
+('Pelican', 'Pelecanus', 'bird', 'Coasts', 25, 'Fish', 'Aquatic', 'They have a large throat pouch to catch fish.'),
+('Peregrine Falcon', 'Falco peregrinus', 'bird', 'Cliffs', 15, 'Medium-sized birds', 'Aviary', 'The fastest animal on the planet.'),
+('Hummingbird', 'Trochilidae', 'bird', 'Various', 5, 'Nectar', 'Jungle', 'They can fly backwards.'),
+('Kingfisher', 'Alcedinidae', 'bird', 'Riversides', 10, 'Fish', 'Aquatic', 'They have excellent eyesight to see under water.'),
+('Swan', 'Cygnus', 'bird', 'Wetlands', 20, 'Aquatic plants', 'Aquatic', 'They usually mate for life.'),
+('Woodpecker', 'Picidae', 'bird', 'Forests', 10, 'Insects', 'Jungle', 'They peck wood to find insects and communicate.'),
+('Puffin', 'Fratercula', 'bird', 'Ocean coasts', 20, 'Fish', 'Aquatic', 'Often called "clowns of the sea".'),
+('Cassowary', 'Casuarius', 'bird', 'Rainforest', 40, 'Fruits', 'Jungle', 'Considered the most dangerous bird.'),
+('Albatross', 'Diomedeidae', 'bird', 'Open ocean', 50, 'Squid and fish', 'Aquatic', 'They have the largest wingspan of any bird.'),
+('Blue Jay', 'Cyanocitta cristata', 'bird', 'Forests', 7, 'Nuts and seeds', 'Aviary', 'They are known for their intelligence.'),
+('Robin', 'Erithacus rubecula', 'bird', 'Woodlands', 2, 'Insects and berries', 'Aviary', 'A familiar sight in many gardens.'),
+('Kiwi', 'Apteryx', 'bird', 'Forests', 50, 'Insects and worms', 'Jungle', 'They are flightless and have nostrils at the end of their beak.'),
+('Barn Owl', 'Tyto alba', 'bird', 'Grasslands', 4, 'Small rodents', 'Aviary', 'They have exceptional hearing.'),
+('Canary', 'Serinus canaria', 'bird', 'Forest edges', 10, 'Seeds', 'Aviary', 'Historically used in coal mines.'),
+('Cockatoo', 'Cacatuidae', 'bird', 'Woodlands', 60, 'Seeds and nuts', 'Jungle', 'They are extremely affectionate.'),
+('Pigeon', 'Columba livia', 'bird', 'Urban areas', 5, 'Seeds', 'Aviary', 'They have been domesticated for thousands of years.'),
+('Crow', 'Corvus', 'bird', 'Various', 15, 'Omnivore', 'Aviary', 'Highly intelligent and can use tools.'),
+
+-- Mammals (25)
+('Lion', 'Panthera leo', 'mammal', 'Savanna', 15, 'Carnivore', 'Savanna', 'Known as the king of the jungle.'),
+('Elephant', 'Loxodonta africana', 'mammal', 'Savanna', 70, 'Herbivore', 'Savanna', 'They have the largest brain of any land animal.'),
+('Giraffe', 'Giraffa camelopardalis', 'mammal', 'Savanna', 25, 'Herbivore', 'Savanna', 'Their tongue can be up to 20 inches long.'),
+('Tiger', 'Panthera tigris', 'mammal', 'Forest', 15, 'Carnivore', 'Jungle', 'No two tigers have the same stripes.'),
+('Gorilla', 'Gorilla beringei', 'mammal', 'Rainforest', 40, 'Herbivore', 'Jungle', 'They share 98% of their DNA with humans.'),
+('Kangaroo', 'Macropus', 'mammal', 'Outback', 20, 'Herbivore', 'Savanna', 'They cannot walk backwards.'),
+('Panda', 'Ailuropoda melanoleuca', 'mammal', 'Bamboo forest', 20, 'Herbivore', 'Jungle', 'They eat bamboo for 12-16 hours a day.'),
+('Zebra', 'Equus quagga', 'mammal', 'Savanna', 25, 'Herbivore', 'Savanna', 'A zebra’s stripes act like bug repellent.'),
+('Rhino', 'Rhinocerotidae', 'mammal', 'Savanna', 40, 'Herbivore', 'Savanna', 'Their horns are made of keratin.'),
+('Hippo', 'Hippopotamus amphibius', 'mammal', 'Rivers', 40, 'Herbivore', 'Aquatic', 'They secrete a natural red sunblock.'),
+('Cheetah', 'Acinonyx jubatus', 'mammal', 'Savanna', 12, 'Carnivore', 'Savanna', 'The fastest land animal.'),
+('Leopard', 'Panthera pardus', 'mammal', 'Various', 15, 'Carnivore', 'Jungle', 'They are incredibly strong climbers.'),
+('Wolf', 'Canis lupus', 'mammal', 'Forests', 10, 'Carnivore', 'Jungle', 'They live and hunt in packs.'),
+('Bear', 'Ursidae', 'mammal', 'Forests', 25, 'Omnivore', 'Jungle', 'They have an excellent sense of smell.'),
+('Koala', 'Phascolarctos cinereus', 'mammal', 'Eucalyptus forests', 15, 'Herbivore', 'Jungle', 'They sleep up to 22 hours a day.'),
+('Sloth', 'Folivora', 'mammal', 'Rainforest', 20, 'Herbivore', 'Jungle', 'They are incredibly slow moving.'),
+('Camel', 'Camelus', 'mammal', 'Desert', 40, 'Herbivore', 'Savanna', 'They can drink 40 gallons of water in one go.'),
+('Meerkat', 'Suricata suricatta', 'mammal', 'Desert', 12, 'Insectivore', 'Savanna', 'They live in large family groups called mobs.'),
+('Orangutan', 'Pongo', 'mammal', 'Rainforest', 40, 'Omnivore', 'Jungle', 'They are highly intelligent apes.'),
+('Chimpanzee', 'Pan troglodytes', 'mammal', 'Rainforest', 50, 'Omnivore', 'Jungle', 'They use tools to get food.'),
+('Moose', 'Alces alces', 'mammal', 'Boreal forests', 15, 'Herbivore', 'Jungle', 'The largest species of the deer family.'),
+('Bison', 'Bison bison', 'mammal', 'Plains', 20, 'Herbivore', 'Savanna', 'They are the largest surviving terrestrial animals in North America.'),
+('Lynx', 'Lynx', 'mammal', 'Forests', 15, 'Carnivore', 'Jungle', 'They have distinctive tufts of hair on their ears.'),
+('Otter', 'Lutrinae', 'mammal', 'Rivers and coasts', 12, 'Carnivore', 'Aquatic', 'They hold hands while sleeping.'),
+('Walrus', 'Odobenus rosmarus', 'mammal', 'Arctic coasts', 40, 'Carnivore', 'Aquatic', 'They have large tusks used for breaking ice.');
+
+-- 25 Employees
+INSERT INTO employees (name, email, role, salary, date_of_joining, current_task, status) VALUES
+('Alice Smith', 'alice@zoo.com', 'Zookeeper', 45000, '2022-01-15', 'Feeding birds', 'on_task'),
+('Bob Johnson', 'bob@zoo.com', 'Veterinarian', 85000, '2021-06-20', 'Routine checkups', 'on_task'),
+('Charlie Brown', 'charlie@zoo.com', 'Security', 40000, '2023-03-10', 'Patrolling South Gate', 'on_task'),
+('Diana Prince', 'diana@zoo.com', 'Tour Guide', 38000, '2022-11-01', NULL, 'available'),
+('Evan Davis', 'evan@zoo.com', 'Maintenance', 42000, '2020-05-15', 'Fixing fence in Savanna', 'on_task'),
+('Fiona White', 'fiona@zoo.com', 'Zookeeper', 46000, '2021-08-12', NULL, 'available'),
+('George Clark', 'george@zoo.com', 'Manager', 75000, '2019-02-28', 'Office work', 'on_task'),
+('Hannah Lewis', 'hannah@zoo.com', 'Veterinarian', 87000, '2020-10-05', NULL, 'available'),
+('Ian Walker', 'ian@zoo.com', 'Security', 41000, '2022-04-18', NULL, 'off_duty'),
+('Julia Hall', 'julia@zoo.com', 'Tour Guide', 39000, '2023-01-22', 'Group tour 3', 'on_task'),
+('Kevin Allen', 'kevin@zoo.com', 'Maintenance', 43000, '2021-12-01', NULL, 'available'),
+('Laura Young', 'laura@zoo.com', 'Zookeeper', 45500, '2022-07-19', 'Cleaning reptile house', 'on_task'),
+('Mike King', 'mike@zoo.com', 'Zookeeper', 44000, '2023-05-11', NULL, 'off_duty'),
+('Nina Wright', 'nina@zoo.com', 'Veterinarian Assistant', 50000, '2022-09-30', NULL, 'available'),
+('Oscar Scott', 'oscar@zoo.com', 'Security', 40500, '2021-03-14', 'Camera monitoring', 'on_task'),
+('Paula Green', 'paula@zoo.com', 'Tour Guide', 38500, '2022-02-17', NULL, 'available'),
+('Quinn Baker', 'quinn@zoo.com', 'Maintenance', 42500, '2020-11-25', 'Plumbing issue', 'on_task'),
+('Rachel Adams', 'rachel@zoo.com', 'Zookeeper', 46500, '2019-08-08', 'Feeding mammals', 'on_task'),
+('Steve Nelson', 'steve@zoo.com', 'Groundskeeper', 37000, '2023-06-01', 'Mowing lawns', 'on_task'),
+('Tina Carter', 'tina@zoo.com', 'Groundskeeper', 37500, '2022-04-05', NULL, 'off_duty'),
+('Uma Perez', 'uma@zoo.com', 'Gift Shop Cashier', 35000, '2023-08-15', 'Register 1', 'on_task'),
+('Victor Roberts', 'victor@zoo.com', 'Food Stand Attendant', 34000, '2023-09-10', NULL, 'available'),
+('Wendy Turner', 'wendy@zoo.com', 'Food Stand Attendant', 34500, '2022-12-05', 'Grill', 'on_task'),
+('Xavier Phillips', 'xavier@zoo.com', 'Janitor', 36000, '2021-01-20', 'Cleaning restrooms', 'on_task'),
+('Yvonne Campbell', 'yvonne@zoo.com', 'Janitor', 36500, '2020-07-30', NULL, 'available');
+
+-- Sample attendance for all 25 employees (for the current date or yesterday)
+INSERT INTO attendance (employee_id, login_time, logout_time, date) VALUES
+(1, '2023-10-01 08:00:00', '2023-10-01 16:00:00', '2023-10-01'),
+(2, '2023-10-01 09:00:00', '2023-10-01 17:00:00', '2023-10-01'),
+(3, '2023-10-01 07:00:00', '2023-10-01 15:00:00', '2023-10-01'),
+(4, '2023-10-01 08:30:00', '2023-10-01 16:30:00', '2023-10-01'),
+(5, '2023-10-01 07:30:00', '2023-10-01 15:30:00', '2023-10-01'),
+(6, '2023-10-01 08:00:00', '2023-10-01 16:00:00', '2023-10-01'),
+(7, '2023-10-01 09:00:00', '2023-10-01 17:00:00', '2023-10-01'),
+(8, '2023-10-01 08:30:00', '2023-10-01 16:30:00', '2023-10-01'),
+(9, '2023-10-01 15:00:00', '2023-10-01 23:00:00', '2023-10-01'),
+(10, '2023-10-01 08:00:00', '2023-10-01 16:00:00', '2023-10-01'),
+(11, '2023-10-01 07:00:00', '2023-10-01 15:00:00', '2023-10-01'),
+(12, '2023-10-01 08:00:00', '2023-10-01 16:00:00', '2023-10-01'),
+(13, '2023-10-01 16:00:00', '2023-10-01 23:59:59', '2023-10-01'),
+(14, '2023-10-01 09:00:00', '2023-10-01 17:00:00', '2023-10-01'),
+(15, '2023-10-01 23:00:00', '2023-10-02 07:00:00', '2023-10-01'),
+(16, '2023-10-01 08:30:00', '2023-10-01 16:30:00', '2023-10-01'),
+(17, '2023-10-01 07:30:00', '2023-10-01 15:30:00', '2023-10-01'),
+(18, '2023-10-01 08:00:00', '2023-10-01 16:00:00', '2023-10-01'),
+(19, '2023-10-01 06:00:00', '2023-10-01 14:00:00', '2023-10-01'),
+(20, '2023-10-01 14:00:00', '2023-10-01 22:00:00', '2023-10-01'),
+(21, '2023-10-01 09:30:00', '2023-10-01 17:30:00', '2023-10-01'),
+(22, '2023-10-01 10:00:00', '2023-10-01 18:00:00', '2023-10-01'),
+(23, '2023-10-01 10:00:00', '2023-10-01 18:00:00', '2023-10-01'),
+(24, '2023-10-01 06:00:00', '2023-10-01 14:00:00', '2023-10-01'),
+(25, '2023-10-01 14:00:00', '2023-10-01 22:00:00', '2023-10-01');
