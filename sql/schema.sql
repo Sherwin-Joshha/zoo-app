@@ -63,8 +63,19 @@ CREATE TABLE employee_earnings (
   employee_id INT NOT NULL,
   ticket_id INT,
   amount DECIMAL(10,2) NOT NULL,
+  source VARCHAR(50) DEFAULT 'commission',
   date DATE NOT NULL,
   FOREIGN KEY (employee_id) REFERENCES employees(id) ON DELETE CASCADE
+);
+
+CREATE TABLE contact_requests (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  email VARCHAR(255) NOT NULL,
+  issue_type VARCHAR(100) NOT NULL,
+  message TEXT NOT NULL,
+  status ENUM('pending', 'resolved') DEFAULT 'pending',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE attendance (

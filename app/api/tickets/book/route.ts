@@ -50,8 +50,8 @@ export async function POST(request: Request) {
       
       const todayDate = new Date().toISOString().split('T')[0];
       await pool.execute(
-        `INSERT INTO employee_earnings (employee_id, date, amount, source) VALUES (?, ?, 50.00, 'commission')`,
-        [selectedEmployeeId, todayDate]
+        `INSERT INTO employee_earnings (employee_id, ticket_id, date, amount, source) VALUES (?, ?, ?, 50.00, 'commission')`,
+        [selectedEmployeeId, result.insertId, todayDate]
       );
     }
 
