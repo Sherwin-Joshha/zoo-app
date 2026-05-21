@@ -12,7 +12,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const [adminName, setAdminName] = useState('Admin');
 
   useEffect(() => {
-    setAdminName('Admin User'); 
+    setAdminName('Admin User');
   }, []);
 
   const handleLogout = async () => {
@@ -21,23 +21,34 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   };
 
   const navLinks = [
-    { name: 'Dashboard', href: '/admin/dashboard', icon: LayoutDashboard },
-    { name: 'Tickets', href: '/admin/tickets', icon: Ticket },
-    { name: 'Employees', href: '/admin/employees', icon: Users },
-    { name: 'Attendance', href: '/admin/attendance', icon: CalendarDays },
-    { name: 'Earnings', href: '/admin/earnings', icon: IndianRupee },
+    { name: 'Dashboard', href: '/admin/dashboard', icon: LayoutDashboard, color: 'text-blue-400' },
+    { name: 'Tickets', href: '/admin/tickets', icon: Ticket, color: 'text-green-400' },
+    { name: 'Employees', href: '/admin/employees', icon: Users, color: 'text-purple-400' },
+    { name: 'Attendance', href: '/admin/attendance', icon: CalendarDays, color: 'text-amber-400' },
+    { name: 'Earnings', href: '/admin/earnings', icon: IndianRupee, color: 'text-emerald-400' },
   ];
 
+  const currentPage = navLinks.find(link => pathname.startsWith(link.href));
+
   const SidebarContent = () => (
-    <div className="flex flex-col h-full bg-slate-900 text-slate-300">
-      <div className="flex items-center gap-3 px-6 py-6 bg-slate-950">
-        <div className="bg-green-600 p-2 rounded-lg text-white">
-          <Leaf size={24} />
+    <div className="flex flex-col h-full bg-slate-900 text-slate-300 border-r border-slate-800/60">
+
+      {/* Brand */}
+      <div className="px-5 py-6 border-b border-slate-800/60 bg-gradient-to-br from-slate-900 to-slate-950">
+        <div className="flex items-center gap-3">
+          <div className="bg-gradient-to-br from-green-500 to-emerald-700 p-2.5 rounded-xl text-white shadow-lg shadow-green-900/40">
+            <Leaf size={20} strokeWidth={2.5} />
+          </div>
+          <div>
+            <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-green-500 leading-none mb-0.5">WildTrails</p>
+            <span className="text-base font-black text-white tracking-tight">Zoo Admin</span>
+          </div>
         </div>
-        <span className="text-xl font-bold text-white tracking-tight">Zoo Admin</span>
       </div>
-      
-      <nav className="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
+
+      {/* Nav */}
+      <nav className="flex-1 px-3 py-5 space-y-1 overflow-y-auto">
+        <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-slate-600 px-3 mb-3">Navigation</p>
         {navLinks.map(link => {
           const isActive = pathname.startsWith(link.href);
           const Icon = link.icon;
@@ -46,26 +57,43 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               key={link.name}
               href={link.href}
               onClick={() => setIsMobileMenuOpen(false)}
-              className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${
-                isActive 
-                  ? 'bg-green-600 text-white shadow-md' 
-                  : 'hover:bg-slate-800 hover:text-white'
+              className={`flex items-center gap-3 px-3.5 py-3 rounded-xl transition-all duration-200 ${
+                isActive
+                  ? 'bg-gradient-to-r from-green-600/20 to-emerald-600/10 text-white border border-green-600/30 shadow-sm'
+                  : 'hover:bg-slate-800/70 hover:text-white'
               }`}
             >
-              <Icon size={20} />
-              <span className="font-medium">{link.name}</span>
+              <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${
+                isActive ? 'bg-green-600 shadow-md shadow-green-900/40' : 'bg-slate-800'
+              }`}>
+                <Icon size={16} className={isActive ? 'text-white' : link.color} />
+              </div>
+              <span className={`font-semibold text-sm ${isActive ? 'text-white' : ''}`}>{link.name}</span>
+              {isActive && (
+                <div className="ml-auto w-1.5 h-1.5 rounded-full bg-green-400" />
+              )}
             </Link>
           );
         })}
       </nav>
 
-      <div className="p-4 border-t border-slate-800">
-        <button 
+      {/* Admin Info + Logout */}
+      <div className="p-4 border-t border-slate-800/60 space-y-3">
+        <div className="flex items-center gap-3 px-1">
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 text-white flex items-center justify-center font-black text-sm shadow-md flex-shrink-0">
+            {adminName.charAt(0)}
+          </div>
+          <div className="min-w-0">
+            <p className="text-sm font-bold text-white truncate">{adminName}</p>
+            <p className="text-[11px] text-slate-500 truncate">Administrator</p>
+          </div>
+        </div>
+        <button
           onClick={handleLogout}
-          className="flex items-center gap-3 px-4 py-3 w-full rounded-xl text-slate-400 hover:bg-slate-800 hover:text-red-400 transition-colors"
+          className="flex items-center gap-3 px-3.5 py-2.5 w-full rounded-xl text-slate-400 hover:bg-red-950/50 hover:text-red-400 hover:border-red-900/30 border border-transparent transition-all text-sm font-semibold"
         >
-          <LogOut size={20} />
-          <span className="font-medium">Logout</span>
+          <LogOut size={15} />
+          Sign Out
         </button>
       </div>
     </div>
@@ -73,46 +101,63 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   return (
     <div className="min-h-screen bg-slate-50 flex">
+
       {/* Desktop Sidebar */}
-      <aside className="hidden md:flex flex-col w-72 fixed inset-y-0 z-20 shadow-xl">
+      <aside className="hidden md:flex flex-col w-64 fixed inset-y-0 z-20 shadow-2xl">
         <SidebarContent />
       </aside>
 
-      {/* Mobile Menu Overlay */}
+      {/* Mobile overlay */}
       {isMobileMenuOpen && (
-        <div className="md:hidden fixed inset-0 z-40 bg-slate-900/80 backdrop-blur-sm" onClick={() => setIsMobileMenuOpen(false)} />
+        <div
+          className="md:hidden fixed inset-0 z-40 bg-slate-950/70 backdrop-blur-sm"
+          onClick={() => setIsMobileMenuOpen(false)}
+        />
       )}
 
       {/* Mobile Sidebar */}
-      <aside className={`md:hidden fixed inset-y-0 left-0 z-50 w-72 transform transition-transform duration-300 ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+      <aside className={`md:hidden fixed inset-y-0 left-0 z-50 w-64 transform transition-transform duration-300 ease-in-out ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         <SidebarContent />
       </aside>
 
-      {/* Main Content */}
-      <div className="flex-1 md:ml-72 flex flex-col min-h-screen">
+      {/* Main */}
+      <div className="flex-1 md:ml-64 flex flex-col min-h-screen">
+
         {/* Topbar */}
-        <header className="bg-white h-16 border-b border-slate-200 flex items-center justify-between px-4 sm:px-6 sticky top-0 z-10 shadow-sm">
-          <div className="flex items-center">
-            <button 
-              className="md:hidden p-2 -ml-2 text-slate-600 hover:text-slate-900 rounded-lg hover:bg-slate-100"
+        <header className="bg-white h-16 border-b border-slate-200/70 flex items-center justify-between px-4 sm:px-6 sticky top-0 z-10 shadow-[0_2px_12px_rgba(0,0,0,0.04)]">
+          <div className="flex items-center gap-3">
+            <button
+              className="md:hidden p-2 -ml-1 text-slate-500 hover:text-slate-900 rounded-xl hover:bg-slate-100 transition-colors"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             >
-              {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              {isMobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
             </button>
-            <h1 className="text-xl font-bold text-slate-800 ml-2 md:ml-0 hidden sm:block">
-              {navLinks.find(link => pathname.startsWith(link.href))?.name || 'Overview'}
-            </h1>
+
+            <div className="hidden sm:flex items-center gap-2">
+              {currentPage && (
+                <>
+                  <div className={`w-2 h-2 rounded-full bg-green-500`} />
+                  <h1 className="text-base font-black text-slate-800 tracking-tight">
+                    {currentPage.name}
+                  </h1>
+                </>
+              )}
+            </div>
           </div>
+
           <div className="flex items-center gap-3">
-            <div className="text-sm text-slate-600 font-medium">Welcome, <span className="text-slate-900">{adminName}</span></div>
-            <div className="w-9 h-9 rounded-full bg-slate-900 text-white flex items-center justify-center font-bold shadow-sm">
+            <div className="hidden sm:flex flex-col items-end">
+              <p className="text-sm font-bold text-slate-900 leading-tight">{adminName}</p>
+              <p className="text-[11px] text-slate-400">Administrator</p>
+            </div>
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 text-white flex items-center justify-center font-black text-sm shadow-md">
               {adminName.charAt(0)}
             </div>
           </div>
         </header>
 
         {/* Page Content */}
-        <main className="flex-1 p-4 sm:p-6 lg:p-8">
+        <main className="flex-1 p-5 sm:p-6 lg:p-8">
           {children}
         </main>
       </div>

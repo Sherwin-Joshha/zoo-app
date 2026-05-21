@@ -1,6 +1,6 @@
 'use client';
 
-import { Ticket, Map, Bird, Info, QrCode, ArrowRight } from 'lucide-react';
+import { Ticket, Map, Bird, Info, QrCode, ArrowRight, Star } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { motion, Variants } from 'framer-motion';
@@ -10,17 +10,16 @@ export default function VisitorDashboard() {
   const [upcomingTickets, setUpcomingTickets] = useState<any[]>([]);
 
   useEffect(() => {
-    const cookies = document.cookie.split(';');
-    const authCookie = cookies.find(c => c.trim().startsWith('auth-token='));
-    setUserName('Visitor'); // Fallback
-
+    setUserName('Visitor');
     fetch('/api/tickets/my-tickets')
       .then(res => res.json())
       .then(data => {
         if (data.success) {
           const now = new Date();
-          now.setHours(0,0,0,0);
-          const upcoming = data.tickets.filter((t: any) => new Date(t.visit_date) >= now && t.status === 'valid').slice(0, 2);
+          now.setHours(0, 0, 0, 0);
+          const upcoming = data.tickets
+            .filter((t: any) => new Date(t.visit_date) >= now && t.status === 'valid')
+            .slice(0, 2);
           setUpcomingTickets(upcoming);
         }
       });
@@ -30,174 +29,217 @@ export default function VisitorDashboard() {
 
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { staggerChildren: 0.1 } }
+    visible: { opacity: 1, transition: { staggerChildren: 0.08 } },
   };
   const itemVariants: Variants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: { y: 0, opacity: 1 }
+    hidden: { y: 18, opacity: 0 },
+    visible: { y: 0, opacity: 1, transition: { type: 'spring', stiffness: 300, damping: 24 } },
   };
 
   return (
-    <div className="py-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-12">
-      
-      {/* Welcome Banner */}
-      <motion.div 
-        initial={{ opacity: 0, y: -20, scale: 0.98 }}
+    <div className="py-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-10">
+
+      {/* ── Welcome Banner ── */}
+      <motion.div
+        initial={{ opacity: 0, y: -16, scale: 0.98 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ duration: 0.6, type: "spring", bounce: 0.4 }}
-        className="bg-gradient-to-br from-green-600 via-emerald-700 to-teal-900 rounded-[2.5rem] p-10 md:p-14 text-white shadow-[0_20px_50px_rgba(16,185,129,0.3)] flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden"
+        transition={{ duration: 0.55, type: 'spring', bounce: 0.35 }}
+        className="relative bg-gradient-to-br from-green-600 via-emerald-600 to-teal-700 rounded-3xl p-8 md:p-12 text-white shadow-2xl shadow-emerald-700/30 overflow-hidden"
       >
-        <div className="absolute top-0 right-0 opacity-10 pointer-events-none scale-150 -translate-y-1/4 translate-x-1/4">
-          <svg width="400" height="400" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>
-        </div>
-        <div className="relative z-10 text-center md:text-left">
-          <h1 className="text-4xl md:text-6xl font-black mb-4 tracking-tighter drop-shadow-md">Welcome back, {userName}!</h1>
-          <p className="text-emerald-100 text-xl max-w-xl font-medium">Ready for another wild adventure? Manage your tickets, explore the map, and discover fascinating animals.</p>
-        </div>
-        <div className="relative z-10 shrink-0">
-          <Link href="/visitor/tickets">
-            <motion.div 
+        {/* Decorative circles */}
+        <div className="absolute -top-12 -right-12 w-56 h-56 rounded-full bg-white/5 pointer-events-none" />
+        <div className="absolute -bottom-8 -left-8 w-40 h-40 rounded-full bg-white/5 pointer-events-none" />
+        <div className="absolute top-6 right-6 w-24 h-24 rounded-full border border-white/10 pointer-events-none" />
+
+        <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+          <div>
+            <p className="text-emerald-200 text-sm font-semibold uppercase tracking-widest mb-2">Welcome Back</p>
+            <h1 className="text-3xl md:text-5xl font-black tracking-tight mb-3">Hello, {userName}! 👋</h1>
+            <p className="text-emerald-100 text-base md:text-lg max-w-lg leading-relaxed">
+              Ready for another wild adventure? Manage your tickets, explore the map, and discover amazing animals.
+            </p>
+          </div>
+          <Link href="/visitor/tickets" className="shrink-0">
+            <motion.div
               whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="inline-flex items-center gap-2 bg-white text-emerald-800 px-8 py-4 rounded-full font-bold shadow-xl hover:shadow-2xl transition-shadow text-lg"
+              whileTap={{ scale: 0.96 }}
+              className="inline-flex items-center gap-2 bg-white text-emerald-800 px-7 py-3.5 rounded-2xl font-bold text-sm shadow-xl hover:shadow-2xl transition-shadow"
             >
-              Book Tickets <ArrowRight size={20} />
+              <Ticket size={18} />
+              Book Tickets <ArrowRight size={16} />
             </motion.div>
           </Link>
         </div>
       </motion.div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-        
-        {/* Left Column: Quick Actions & Highlights */}
-        <motion.div variants={containerVariants} initial="hidden" animate="visible" className="lg:col-span-2 space-y-10">
-          
-          <div>
-            <h2 className="text-3xl font-black text-slate-900 mb-6 flex items-center gap-3">
-              <span className="w-2 h-8 bg-green-500 rounded-full inline-block"></span> Quick Access
-            </h2>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+        {/* ── Left: Quick Access + Highlights ── */}
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          className="lg:col-span-2 space-y-8"
+        >
+          {/* Quick Access */}
+          <motion.div variants={itemVariants}>
+            <div className="flex items-center gap-3 mb-5">
+              <div className="w-1.5 h-6 bg-gradient-to-b from-green-500 to-emerald-600 rounded-full" />
+              <h2 className="text-xl font-black text-slate-900">Quick Access</h2>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {[
-                { name: 'Tickets', icon: Ticket, color: 'text-green-600', bg: 'bg-green-100', href: '/visitor/tickets' },
-                { name: 'Zoo Map', icon: Map, color: 'text-blue-600', bg: 'bg-blue-100', href: '/visitor/map' },
-                { name: 'Animals', icon: Bird, color: 'text-amber-600', bg: 'bg-amber-100', href: '/visitor/animals' },
-                { name: 'Safety', icon: Info, color: 'text-red-600', bg: 'bg-red-100', href: '/visitor/safety' }
-              ].map((item, i) => (
-                <Link href={item.href} key={i}>
-                  <motion.div 
+                { name: 'Tickets', icon: Ticket, gradient: 'from-green-500 to-emerald-600', bg: 'bg-green-50', ring: 'ring-green-100', href: '/visitor/tickets' },
+                { name: 'Zoo Map', icon: Map, gradient: 'from-blue-500 to-indigo-600', bg: 'bg-blue-50', ring: 'ring-blue-100', href: '/visitor/map' },
+                { name: 'Animals', icon: Bird, gradient: 'from-amber-500 to-orange-500', bg: 'bg-amber-50', ring: 'ring-amber-100', href: '/visitor/animals' },
+                { name: 'Safety', icon: Info, gradient: 'from-red-500 to-rose-600', bg: 'bg-red-50', ring: 'ring-red-100', href: '/visitor/safety' },
+              ].map((item) => (
+                <Link href={item.href} key={item.name}>
+                  <motion.div
                     variants={itemVariants}
-                    whileHover={{ y: -5 }}
-                    className="bg-white p-6 rounded-[2rem] shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-slate-100 flex flex-col items-center text-center group h-full"
+                    whileHover={{ y: -6, scale: 1.02 }}
+                    whileTap={{ scale: 0.97 }}
+                    className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex flex-col items-center text-center group cursor-pointer h-full hover:shadow-md transition-shadow"
                   >
-                    <div className={`p-4 ${item.bg} ${item.color} rounded-2xl mb-4 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300 shadow-inner shadow-white`}>
-                      <item.icon size={28} strokeWidth={2.5} />
+                    <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${item.gradient} flex items-center justify-center mb-3 shadow-lg group-hover:scale-110 transition-transform duration-300`}>
+                      <item.icon size={24} className="text-white" strokeWidth={2} />
                     </div>
-                    <h3 className="font-bold text-slate-800 text-lg">{item.name}</h3>
+                    <h3 className="font-bold text-slate-800 text-sm">{item.name}</h3>
                   </motion.div>
                 </Link>
               ))}
             </div>
-          </div>
+          </motion.div>
 
+          {/* Zoo Highlights */}
           <motion.div variants={itemVariants}>
-            <h2 className="text-3xl font-black text-slate-900 mb-6 flex items-center gap-3">
-              <span className="w-2 h-8 bg-indigo-500 rounded-full inline-block"></span> Zoo Highlights
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-              <motion.div whileHover={{ scale: 1.02 }} className="bg-slate-900 text-white p-8 rounded-[2rem] shadow-lg flex items-center justify-between relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full blur-2xl -translate-y-1/2 translate-x-1/4"></div>
-                <div className="relative z-10">
-                  <p className="text-slate-400 text-sm font-bold uppercase tracking-widest mb-2">Total Species</p>
-                  <p className="text-5xl font-black">50+</p>
-                </div>
-                <Bird size={64} className="text-slate-700/50 relative z-10" />
+            <div className="flex items-center gap-3 mb-5">
+              <div className="w-1.5 h-6 bg-gradient-to-b from-indigo-500 to-purple-600 rounded-full" />
+              <h2 className="text-xl font-black text-slate-900">Zoo Highlights</h2>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Species count */}
+              <motion.div
+                whileHover={{ scale: 1.02 }}
+                className="relative bg-slate-900 text-white p-7 rounded-2xl overflow-hidden shadow-lg"
+              >
+                <div className="absolute -top-6 -right-6 w-28 h-28 rounded-full bg-white/5" />
+                <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-green-500 to-emerald-400" />
+                <p className="text-slate-400 text-xs font-bold uppercase tracking-widest mb-2">Total Species</p>
+                <p className="text-5xl font-black mb-1">50<span className="text-green-400">+</span></p>
+                <p className="text-slate-500 text-xs">Across 5 immersive zones</p>
+                <Bird size={56} className="absolute bottom-4 right-4 text-slate-800" />
               </motion.div>
-              
-              <motion.div whileHover={{ scale: 1.02 }} className="bg-gradient-to-br from-indigo-600 to-purple-700 text-white p-8 rounded-[2rem] shadow-lg flex items-center justify-between relative overflow-hidden">
-                <div className="absolute bottom-0 left-0 w-32 h-32 bg-white/10 rounded-full blur-2xl translate-y-1/2 -translate-x-1/4"></div>
-                <div className="relative z-10">
-                  <p className="text-indigo-200 text-sm font-bold uppercase tracking-widest mb-2">Immersive Zones</p>
-                  <p className="text-5xl font-black">5</p>
-                </div>
-                <Map size={64} className="text-indigo-400/50 relative z-10" />
+
+              {/* Zones */}
+              <motion.div
+                whileHover={{ scale: 1.02 }}
+                className="relative bg-gradient-to-br from-indigo-600 to-purple-700 text-white p-7 rounded-2xl overflow-hidden shadow-lg"
+              >
+                <div className="absolute -bottom-6 -right-6 w-28 h-28 rounded-full bg-white/10" />
+                <div className="absolute bottom-0 left-0 w-full h-1 bg-white/20" />
+                <p className="text-indigo-200 text-xs font-bold uppercase tracking-widest mb-2">Immersive Zones</p>
+                <p className="text-5xl font-black mb-1">5</p>
+                <p className="text-indigo-200 text-xs">Unique wildlife habitats</p>
+                <Map size={56} className="absolute bottom-4 right-4 text-indigo-500/50" />
               </motion.div>
-              
-              <motion.div whileHover={{ scale: 1.01 }} className="md:col-span-2 bg-gradient-to-r from-amber-100 to-orange-50 border border-amber-200/50 p-8 rounded-[2rem] shadow-sm flex items-start gap-4">
-                <span className="text-3xl filter drop-shadow-md">💡</span> 
+
+              {/* Animal Fact */}
+              <motion.div
+                whileHover={{ scale: 1.01 }}
+                className="md:col-span-2 bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200/60 p-6 rounded-2xl shadow-sm flex items-start gap-4"
+              >
+                <div className="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <Star size={22} className="text-amber-600" fill="currentColor" />
+                </div>
                 <div>
-                  <p className="text-amber-900 font-bold mb-1 text-lg">Animal Fact of the Day</p>
-                  <p className="text-amber-800/80 font-medium text-lg">{animalFact}</p>
+                  <p className="text-amber-900 font-bold mb-1 text-sm uppercase tracking-wider">Animal Fact of the Day</p>
+                  <p className="text-amber-800 font-medium text-base leading-relaxed">&ldquo;{animalFact}&rdquo;</p>
                 </div>
               </motion.div>
             </div>
           </motion.div>
-
         </motion.div>
 
-        {/* Right Column: Upcoming Tickets */}
-        <motion.div 
+        {/* ── Right: Upcoming Tickets ── */}
+        <motion.div
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.3 }}
-          className="lg:col-span-1 space-y-6"
+          transition={{ delay: 0.25 }}
+          className="lg:col-span-1 space-y-4"
         >
-          <h2 className="text-3xl font-black text-slate-900 flex items-center gap-3">
-            <span className="w-2 h-8 bg-amber-500 rounded-full inline-block"></span> Your Visits
-          </h2>
-          
+          <div className="flex items-center gap-3 mb-5">
+            <div className="w-1.5 h-6 bg-gradient-to-b from-amber-400 to-orange-500 rounded-full" />
+            <h2 className="text-xl font-black text-slate-900">Your Visits</h2>
+          </div>
+
           {upcomingTickets.length === 0 ? (
-            <div className="bg-white p-10 rounded-[2rem] shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-slate-100 text-center flex flex-col items-center justify-center min-h-[400px]">
-              <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mb-6">
-                <Ticket className="text-slate-300" size={40} />
+            <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 text-center flex flex-col items-center justify-center min-h-[320px]">
+              <div className="w-16 h-16 bg-slate-50 rounded-2xl flex items-center justify-center mb-4 shadow-inner">
+                <Ticket className="text-slate-300" size={32} />
               </div>
-              <p className="text-slate-500 font-bold text-lg mb-6">No upcoming visits.</p>
+              <p className="text-slate-600 font-bold text-base mb-1">No upcoming visits</p>
+              <p className="text-slate-400 text-sm mb-6">Book your first ticket today!</p>
               <Link href="/visitor/tickets">
-                <motion.button whileHover={{ scale: 1.05 }} className="px-6 py-3 bg-green-50 text-green-700 font-bold rounded-xl hover:bg-green-100 transition-colors">
-                  Book a ticket now &rarr;
+                <motion.button
+                  whileHover={{ scale: 1.04 }}
+                  className="px-5 py-2.5 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-bold rounded-xl text-sm shadow-md hover:shadow-lg transition-shadow"
+                >
+                  Book Tickets →
                 </motion.button>
               </Link>
             </div>
           ) : (
-            <div className="space-y-5">
+            <div className="space-y-4">
               {upcomingTickets.map((t: any) => (
-                <motion.div 
-                  whileHover={{ y: -4 }}
-                  key={t.id} 
-                  className="bg-white p-7 rounded-[2rem] shadow-[0_4px_20px_rgb(0,0,0,0.04)] border border-slate-100 relative overflow-hidden group"
+                <motion.div
+                  whileHover={{ y: -3 }}
+                  key={t.id}
+                  className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden relative group hover:shadow-md transition-shadow"
                 >
-                  <div className="absolute top-0 left-0 w-3 h-full bg-gradient-to-b from-green-400 to-emerald-600"></div>
-                  <div className="flex justify-between items-start mb-6">
-                    <div>
-                      <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1.5">Visit Date</p>
-                      <p className="text-xl font-black text-slate-900">
-                        {new Date(t.visit_date).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })}
-                      </p>
+                  {/* Colored top bar */}
+                  <div className="h-1.5 w-full bg-gradient-to-r from-green-500 to-emerald-400" />
+                  <div className="p-5">
+                    <div className="flex justify-between items-start mb-4">
+                      <div>
+                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Visit Date</p>
+                        <p className="text-lg font-black text-slate-900">
+                          {new Date(t.visit_date).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })}
+                        </p>
+                      </div>
+                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-green-100 text-green-700 text-xs font-bold">
+                        <span className="w-1.5 h-1.5 rounded-full bg-green-500" />
+                        VALID
+                      </span>
                     </div>
-                    <div className="text-right">
-                      <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1.5">Guests</p>
-                      <p className="font-bold text-slate-700 bg-slate-50 px-3 py-1 rounded-lg">{t.adult_count} Adults, {t.child_count} Kids</p>
+                    <div className="mb-4">
+                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Guests</p>
+                      <p className="text-sm font-semibold text-slate-700">{t.adult_count} Adult{t.adult_count !== 1 ? 's' : ''}, {t.child_count} Child{t.child_count !== 1 ? 'ren' : ''}</p>
                     </div>
-                  </div>
-                  <div className="pt-5 border-t border-slate-100 border-dashed flex items-center justify-between">
-                    <div>
-                      <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1">Ticket ID</p>
-                      <p className="font-mono text-sm font-bold text-slate-800">{t.ticket_id.split('-')[0]}</p>
+                    <div className="pt-4 border-t border-dashed border-slate-100 flex items-center justify-between">
+                      <div>
+                        <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-0.5">Ticket ID</p>
+                        <p className="font-mono text-xs font-bold text-slate-700">{t.ticket_id.split('-')[0]}</p>
+                      </div>
+                      <Link
+                        href="/visitor/tickets"
+                        className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-slate-900 hover:bg-slate-700 text-white text-xs font-bold rounded-xl transition-colors shadow-sm"
+                      >
+                        <QrCode size={14} /> View Pass
+                      </Link>
                     </div>
-                    <Link href="/visitor/tickets" className="inline-flex items-center gap-2 px-4 py-2 bg-slate-900 text-white text-xs font-bold rounded-xl hover:bg-slate-800 transition-colors shadow-md">
-                      <QrCode size={16} /> View Pass
-                    </Link>
                   </div>
                 </motion.div>
               ))}
-              {upcomingTickets.length > 0 && (
-                <Link href="/visitor/tickets" className="block w-full text-center py-4 bg-white hover:bg-slate-50 text-sm font-bold text-slate-600 rounded-2xl transition-colors border border-slate-200 shadow-sm hover:shadow-md">
-                  View all tickets &rarr;
-                </Link>
-              )}
+              <Link
+                href="/visitor/tickets"
+                className="block w-full text-center py-3.5 bg-white hover:bg-slate-50 text-sm font-bold text-slate-600 rounded-2xl transition-colors border border-slate-200 shadow-sm hover:shadow-md"
+              >
+                View all tickets →
+              </Link>
             </div>
           )}
         </motion.div>
-
       </div>
     </div>
   );
