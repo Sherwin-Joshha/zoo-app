@@ -45,10 +45,10 @@ These are populated from the seed script:
 
 - **Admin Account**: 
   - Email: `admin@zoo.com` 
-  - Password: `password123`
+  - Password: `password`
 - **Visitor Account**: 
   - Email: `visitor@example.com` 
-  - Password: `password123`
+  - Password: `password`
 
 ## Folder Structure Overview
 - `/app` - Next.js App Router pages and API routes.
