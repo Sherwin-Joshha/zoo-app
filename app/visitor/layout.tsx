@@ -23,7 +23,7 @@ export default function VisitorLayout({ children }: { children: React.ReactNode 
   ];
 
   return (
-    <div className="min-h-screen bg-[#f6f8fb] flex flex-col">
+    <div className="min-h-screen bg-transparent flex flex-col">
 
       {/* Top Navbar */}
       <nav className="bg-white/90 backdrop-blur-xl border-b border-slate-200/70 sticky top-0 z-40 shadow-[0_2px_16px_rgba(0,0,0,0.04)]">
@@ -103,8 +103,10 @@ export default function VisitorLayout({ children }: { children: React.ReactNode 
       </nav>
 
       {/* Main Content */}
-      <main className="flex-grow w-full">
-        {children}
+      <main className="flex-grow w-full p-4 sm:p-6 lg:p-8">
+        <div className="max-w-7xl mx-auto bg-white/30 backdrop-blur-md rounded-3xl shadow-xl border border-white/60 p-6 sm:p-8 min-h-[calc(100vh-10rem)]">
+          {children}
+        </div>
       </main>
 
       {/* Footer */}

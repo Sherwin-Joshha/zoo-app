@@ -49,7 +49,7 @@ export default function AnimalEncyclopedia() {
   );
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+    <div className="w-full relative overflow-hidden">
       {/* Background blobs */}
       <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-green-200/20 rounded-full blur-3xl pointer-events-none -translate-y-1/2 translate-x-1/3"></div>
       <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-emerald-200/20 rounded-full blur-3xl pointer-events-none translate-y-1/3 -translate-x-1/3"></div>

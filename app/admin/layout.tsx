@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { LayoutDashboard, Ticket, Users, CalendarDays, IndianRupee, LogOut, Menu, X, Leaf } from 'lucide-react';
+import { LayoutDashboard, Ticket, Users, CalendarDays, IndianRupee, LogOut, Menu, X, Leaf, PawPrint } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -26,6 +26,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     { name: 'Employees', href: '/admin/employees', icon: Users, color: 'text-purple-400' },
     { name: 'Attendance', href: '/admin/attendance', icon: CalendarDays, color: 'text-amber-400' },
     { name: 'Earnings', href: '/admin/earnings', icon: IndianRupee, color: 'text-emerald-400' },
+    { name: 'Add Animal', href: '/admin/animals/add', icon: PawPrint, color: 'text-orange-400' },
   ];
 
   const currentPage = navLinks.find(link => pathname.startsWith(link.href));
@@ -57,15 +58,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               key={link.name}
               href={link.href}
               onClick={() => setIsMobileMenuOpen(false)}
-              className={`flex items-center gap-3 px-3.5 py-3 rounded-xl transition-all duration-200 ${
-                isActive
-                  ? 'bg-gradient-to-r from-green-600/20 to-emerald-600/10 text-white border border-green-600/30 shadow-sm'
-                  : 'hover:bg-slate-800/70 hover:text-white'
-              }`}
+              className={`flex items-center gap-3 px-3.5 py-3 rounded-xl transition-all duration-200 ${isActive
+                ? 'bg-gradient-to-r from-green-600/20 to-emerald-600/10 text-white border border-green-600/30 shadow-sm'
+                : 'hover:bg-slate-800/70 hover:text-white'
+                }`}
             >
-              <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${
-                isActive ? 'bg-green-600 shadow-md shadow-green-900/40' : 'bg-slate-800'
-              }`}>
+              <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${isActive ? 'bg-green-600 shadow-md shadow-green-900/40' : 'bg-slate-800'
+                }`}>
                 <Icon size={16} className={isActive ? 'text-white' : link.color} />
               </div>
               <span className={`font-semibold text-sm ${isActive ? 'text-white' : ''}`}>{link.name}</span>
@@ -100,7 +99,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   );
 
   return (
-    <div className="min-h-screen bg-slate-50 flex">
+    <div className="min-h-screen bg-transparent flex">
 
       {/* Desktop Sidebar */}
       <aside className="hidden md:flex flex-col w-64 fixed inset-y-0 z-20 shadow-2xl">
@@ -157,8 +156,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </header>
 
         {/* Page Content */}
-        <main className="flex-1 p-5 sm:p-6 lg:p-8">
-          {children}
+        <main className="flex-1 p-4 sm:p-6 lg:p-8">
+          <div className="bg-white/40 backdrop-blur-md rounded-3xl shadow-xl border border-white p-6 sm:p-8 min-h-[calc(100vh-6rem)]">
+            {children}
+          </div>
         </main>
       </div>
     </div>

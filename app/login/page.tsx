@@ -61,16 +61,27 @@ export default function LoginPage() {
     <div className="min-h-screen flex bg-[#f0f4f0]">
 
       {/* ── Left Hero Panel ── */}
-      <div className="hidden lg:flex lg:w-[55%] relative overflow-hidden bg-gradient-to-br from-green-700 via-emerald-700 to-teal-800 flex-col justify-between p-14">
+      <div className="hidden lg:flex lg:w-[55%] relative overflow-hidden flex-col justify-between p-14">
+        
+        {/* CSS Animation for Panning */}
+        <style>{`
+          @keyframes panImage {
+            0% { transform: scale(1.15) translate(2%, 2%); }
+            100% { transform: scale(1.15) translate(-2%, -2%); }
+          }
+        `}</style>
 
-        {/* Background pattern */}
-        <div className="absolute inset-0 opacity-10"
-          style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)', backgroundSize: '32px 32px' }} />
+        {/* Moving Background Image */}
+        <div 
+          className="absolute inset-0 z-0 bg-cover bg-center"
+          style={{ 
+            backgroundImage: "url('/jungle_background.png')",
+            animation: "panImage 25s ease-in-out infinite alternate"
+          }}
+        />
 
-        {/* Animated blobs */}
-        <div className="absolute -top-32 -left-32 w-[500px] h-[500px] rounded-full bg-white/5 blur-3xl" />
-        <div className="absolute -bottom-40 -right-20 w-[400px] h-[400px] rounded-full bg-teal-400/10 blur-3xl" />
-        <div className="absolute top-1/3 right-10 w-64 h-64 rounded-full bg-emerald-300/10 blur-2xl" />
+        {/* Overlay to ensure text legibility */}
+        <div className="absolute inset-0 z-0 bg-gradient-to-t from-black/80 via-black/40 to-black/60" />
 
         {/* Top: Logo + back */}
         <div className="relative z-10 flex items-center justify-between">

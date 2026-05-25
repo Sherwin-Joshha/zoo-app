@@ -7,11 +7,11 @@ INSERT INTO users (name, email, password_hash, role) VALUES
 
 -- 5 zones
 INSERT INTO zones (zone_name, description, lat, lng) VALUES
-('Savanna', 'Vast open plains home to majestic mammals.', 34.0522, -118.2437),
-('Aquatic', 'Underwater worlds with fascinating sea creatures.', 34.0530, -118.2440),
-('Aviary', 'A large netted enclosure for diverse bird species.', 34.0515, -118.2430),
-('Jungle', 'Dense foliage and high humidity for tropical species.', 34.0540, -118.2450),
-('Reptile House', 'Climate-controlled habitats for cold-blooded reptiles.', 34.0550, -118.2460);
+('Savanna', 'Vast open plains home to majestic mammals.', 34.0825, -118.2360),
+('Aquatic', 'Underwater worlds with fascinating sea creatures.', 34.0830, -118.2380),
+('Aviary', 'A large netted enclosure for diverse bird species.', 34.0820, -118.2420),
+('Jungle', 'Dense foliage and high humidity for tropical species.', 34.0850, -118.2365),
+('Reptile House', 'Climate-controlled habitats for cold-blooded reptiles.', 34.0790, -118.2400);
 
 -- 25 bird species and 25 animal (mammal) species
 INSERT INTO animals (name, species, category, habitat, lifespan, diet, zone, fun_fact) VALUES

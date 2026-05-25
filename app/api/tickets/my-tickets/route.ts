@@ -11,7 +11,7 @@ export async function GET(request: Request) {
 
     const [rows]: any = await pool.execute(
       'SELECT * FROM tickets WHERE user_id = ? ORDER BY created_at DESC',
-      [session.id]
+      [session.id as any]
     );
 
     return NextResponse.json({ success: true, tickets: rows });

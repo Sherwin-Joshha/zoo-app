@@ -60,3 +60,37 @@ a, button {
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
 }
+
+body {
+  position: relative;
+  z-index: 0;
+}
+
+@keyframes leafSway {
+  0%   { transform: rotate(0deg) translateX(0px); }
+  25%  { transform: rotate(2.5deg) translateX(3px); }
+  50%  { transform: rotate(-1.5deg) translateX(-2px); }
+  75%  { transform: rotate(3deg) translateX(4px); }
+  100% { transform: rotate(0deg) translateX(0px); }
+}
+
+@keyframes petalWobble {
+  0%   { transform: rotate(0deg) scale(1); }
+  30%  { transform: rotate(1.5deg) scale(1.02); }
+  60%  { transform: rotate(-2deg) scale(0.99); }
+  100% { transform: rotate(0deg) scale(1); }
+}
+
+@keyframes floatLeaf {
+  0% { transform: translate(0, 0) rotate(0deg); opacity: 0; }
+  10% { opacity: 0.6; }
+  90% { opacity: 0.6; }
+  100% { transform: translate(80vw, -100vh) rotate(360deg); opacity: 0; }
+}
+
+@keyframes floatLeafAlt {
+  0% { transform: translate(0, 0) rotate(0deg); opacity: 0; }
+  10% { opacity: 0.5; }
+  90% { opacity: 0.5; }
+  100% { transform: translate(-80vw, -100vh) rotate(-360deg); opacity: 0; }
+}

@@ -4,13 +4,13 @@
 // Add to next.config.js: transpilePackages: ['react-leaflet', 'leaflet']
 
 import { useEffect, useState } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, useMap, Polygon, Polyline } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, useMap, Polygon, Polyline, Tooltip } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Search } from 'lucide-react';
-import { getZoneIcon } from './ZoneMarker';
+import { getZoneIcon, zoneConfigs } from './ZoneMarker';
 
 const RecenterAutomatically = ({ lat, lng }: { lat: number; lng: number }) => {
   const map = useMap();
@@ -26,6 +26,10 @@ const getAmenityIcon = (type: string) => {
   let bgColor = '';
   
   switch(type) {
+    case 'entrance':
+      bgColor = '#a855f7'; // purple
+      iconHtml = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>';
+      break;
     case 'reception':
       bgColor = '#3b82f6'; // blue
       iconHtml = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>';
@@ -86,36 +90,41 @@ export default function ZooMap() {
     }
   }, [searchedZone]);
 
-  const defaultCenter: [number, number] = [34.0535, -118.2445];
+  const defaultCenter: [number, number] = [34.0820, -118.2380];
   const center: [number, number] = selectedZone 
     ? [parseFloat(selectedZone.lat), parseFloat(selectedZone.lng)] 
     : defaultCenter;
 
   // Static Map Data (Overlay elements)
   const zooBoundary: [number, number][] = [
-    [34.0565, -118.2475],
-    [34.0565, -118.2415],
-    [34.0505, -118.2415],
-    [34.0505, -118.2475],
+    [34.0860, -118.2420],
+    [34.0870, -118.2380],
+    [34.0850, -118.2340],
+    [34.0810, -118.2330],
+    [34.0780, -118.2350],
+    [34.0770, -118.2390],
+    [34.0790, -118.2430],
+    [34.0830, -118.2440],
   ];
 
   const paths: [number, number][][] = [
-    [[34.0510, -118.2445], [34.0560, -118.2445]], // Main vertical spine
-    [[34.0522, -118.2465], [34.0522, -118.2425]], // Cross path 1 (Savanna area)
-    [[34.0540, -118.2465], [34.0540, -118.2425]], // Cross path 2 (Jungle area)
-    [[34.0530, -118.2445], [34.0530, -118.2435]], // To Aquatic
-    [[34.0515, -118.2445], [34.0515, -118.2425]], // To Aviary
-    [[34.0550, -118.2445], [34.0550, -118.2465]], // To Reptile
+    [[34.0775, -118.2390], [34.0800, -118.2385], [34.0820, -118.2390], [34.0840, -118.2375], [34.0855, -118.2365]], // Main crooked spine
+    [[34.0820, -118.2390], [34.0815, -118.2370], [34.0825, -118.2355], [34.0815, -118.2340]], // East path
+    [[34.0820, -118.2390], [34.0825, -118.2410], [34.0815, -118.2425], [34.0820, -118.2435]], // West path
+    [[34.0840, -118.2375], [34.0850, -118.2355], [34.0860, -118.2360], [34.0860, -118.2385]], // North loop
+    [[34.0800, -118.2385], [34.0795, -118.2405], [34.0785, -118.2410], [34.0775, -118.2390]], // South loop
   ];
 
   const amenities = [
-    { id: 'a1', name: 'Main Gate & Reception', type: 'reception', position: [34.0510, -118.2445] as [number, number] },
-    { id: 'a2', name: 'Visitor Parking', type: 'parking', position: [34.0502, -118.2445] as [number, number] },
-    { id: 'a3', name: 'Central Food Court', type: 'food', position: [34.0535, -118.2445] as [number, number] },
-    { id: 'a4', name: 'Jungle Cafe', type: 'food', position: [34.0545, -118.2460] as [number, number] },
-    { id: 'a5', name: 'Help Desk & First Aid', type: 'help', position: [34.0526, -118.2445] as [number, number] },
-    { id: 'a6', name: 'Restrooms (North)', type: 'restroom', position: [34.0555, -118.2440] as [number, number] },
-    { id: 'a7', name: 'Restrooms (South)', type: 'restroom', position: [34.0518, -118.2455] as [number, number] },
+    { id: 'a1', name: 'Main Entrance & Reception', type: 'entrance', position: [34.0775, -118.2390] as [number, number] },
+    { id: 'a2', name: 'Visitor Parking', type: 'parking', position: [34.0765, -118.2395] as [number, number] },
+    { id: 'a3', name: 'Central Food Court', type: 'food', position: [34.0820, -118.2385] as [number, number] },
+    { id: 'a4', name: 'Jungle Cafe', type: 'food', position: [34.0855, -118.2365] as [number, number] },
+    { id: 'a5', name: 'Help Desk & First Aid', type: 'help', position: [34.0800, -118.2380] as [number, number] },
+    { id: 'a6', name: 'Restrooms (North)', type: 'restroom', position: [34.0845, -118.2385] as [number, number] },
+    { id: 'a7', name: 'Restrooms (South)', type: 'restroom', position: [34.0815, -118.2350] as [number, number] },
+    { id: 'a8', name: 'East Entrance', type: 'entrance', position: [34.0815, -118.2340] as [number, number] },
+    { id: 'a9', name: 'North Entrance', type: 'entrance', position: [34.0860, -118.2385] as [number, number] },
   ];
 
   return (
@@ -142,8 +151,8 @@ export default function ZooMap() {
         scrollWheelZoom={true}
       >
         <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          attribution='&copy; <a href="https://www.esri.com/">Esri</a>'
+          url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
         />
         
         <RecenterAutomatically lat={center[0]} lng={center[1]} />
@@ -191,6 +200,9 @@ export default function ZooMap() {
               },
             }}
           >
+            <Tooltip direction="bottom" offset={[0, 10]} opacity={1} permanent className="font-bold bg-white/90 border-0 shadow-sm text-slate-800 rounded-lg px-2 py-1">
+              {zone.zone_name}
+            </Tooltip>
             <Popup className="custom-popup" maxWidth={320}>
               <div className="w-72 max-h-80 overflow-y-auto overflow-x-hidden p-1">
                 <h3 className="text-xl font-bold text-slate-900 border-b pb-2 mb-3">{zone.zone_name}</h3>
@@ -235,18 +247,20 @@ export default function ZooMap() {
           <div>
             <p className="text-[10px] font-bold text-slate-400 uppercase mb-2">Animal Zones</p>
             <div className="grid grid-cols-2 gap-y-2 gap-x-1">
-              {[
-                { name: 'Savanna', color: 'bg-amber-500' },
-                { name: 'Aquatic', color: 'bg-blue-500' },
-                { name: 'Aviary', color: 'bg-emerald-500' },
-                { name: 'Jungle', color: 'bg-green-500' },
-                { name: 'Reptile', color: 'bg-violet-500' }
-              ].map(zone => (
-                <div key={zone.name} className="flex items-center gap-2">
-                  <span className={`w-3 h-3 rounded-full shadow-sm ${zone.color}`}></span>
-                  <span className="text-[11px] font-medium text-slate-700">{zone.name}</span>
-                </div>
-              ))}
+              {['Savanna', 'Aquatic', 'Aviary', 'Jungle', 'Reptile House'].map(zoneName => {
+                const config = zoneConfigs[zoneName];
+                if (!config) return null;
+                return (
+                  <div key={zoneName} className="flex items-center gap-2">
+                    <div 
+                      className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0"
+                      style={{ backgroundColor: config.bg, border: `1px solid ${config.color}` }}
+                      dangerouslySetInnerHTML={{ __html: config.svg.replace('width="16"', 'width="12"').replace('height="16"', 'height="12"') }}
+                    />
+                    <span className="text-[11px] font-medium text-slate-700">{zoneName.replace(' House', '')}</span>
+                  </div>
+                );
+              })}
             </div>
           </div>
 
@@ -258,6 +272,7 @@ export default function ZooMap() {
                 { name: 'Help', color: 'bg-red-500' },
                 { name: 'Restroom', color: 'bg-cyan-500' },
                 { name: 'Parking', color: 'bg-slate-500' },
+                { name: 'Entrance', color: 'bg-purple-500' },
               ].map(amenity => (
                 <div key={amenity.name} className="flex items-center gap-2">
                   <span className={`w-3 h-3 rounded-sm shadow-sm ${amenity.color}`}></span>
