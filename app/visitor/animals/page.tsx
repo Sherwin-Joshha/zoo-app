@@ -9,7 +9,7 @@ export default function AnimalEncyclopedia() {
   const [animals, setAnimals] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   
-  const [categoryFilter, setCategoryFilter] = useState<'all' | 'bird' | 'mammal'>('all');
+  const [categoryFilter, setCategoryFilter] = useState<'all' | 'bird' | 'mammal' | 'reptile'>('all');
   const [zoneFilter, setZoneFilter] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -73,7 +73,7 @@ export default function AnimalEncyclopedia() {
         >
           {/* Category Tabs */}
           <div className="flex bg-slate-100/80 p-1.5 rounded-2xl w-full lg:w-auto border border-slate-200/50">
-            {['all', 'bird', 'mammal'].map((cat) => (
+            {['all', 'bird', 'mammal', 'reptile'].map((cat) => (
               <button
                 key={cat}
                 onClick={() => setCategoryFilter(cat as any)}

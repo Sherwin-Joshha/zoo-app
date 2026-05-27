@@ -3,12 +3,31 @@
 import { useState, useEffect } from 'react';
 import { Ticket, IndianRupee, Users, ShieldCheck, Loader2, TrendingUp } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { motion, Variants } from 'framer-motion';
 
 export default function AdminDashboard() {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [adminName, setAdminName] = useState('Admin');
+
+  const containerVariants: Variants = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1, transition: { staggerChildren: 0.1 } }
+  };
+
+  const itemVariants: Variants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: { y: 0, opacity: 1, transition: { type: 'spring', stiffness: 300, damping: 24 } }
+  };
 
   useEffect(() => {
+    fetch('/api/auth/me')
+      .then(res => res.json())
+      .then(result => {
+        if (result.success && result.user) setAdminName(result.user.name);
+      })
+      .catch(() => {});
+
     fetch('/api/admin/tickets')
       .then(res => res.json())
       .then(result => {
@@ -71,12 +90,24 @@ export default function AdminDashboard() {
   ];
 
   return (
-    <div className="space-y-6">
+    <motion.div 
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+      className="space-y-6"
+    >
+
+      {/* Header */}
+      <div className="mb-2">
+        <h1 className="text-2xl font-black text-slate-900 tracking-tight">Welcome, {adminName}! 👋</h1>
+        <p className="text-slate-500 text-sm mt-0.5">Here is the overview of the zoo's operations today.</p>
+      </div>
 
       {/* Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
         {statCards.map(({ label, value, icon: Icon, gradient, bg, text, border }) => (
-          <div
+          <motion.div
+            variants={itemVariants}
             key={label}
             className={`bg-white rounded-2xl shadow-sm border ${border} overflow-hidden hover:shadow-md transition-shadow`}
           >
@@ -90,7 +121,7 @@ export default function AdminDashboard() {
                 <p className="text-2xl font-black text-slate-900">{value}</p>
               </div>
             </div>
-          </div>
+          </motion.div>
         ))}
       </div>
 
@@ -98,7 +129,7 @@ export default function AdminDashboard() {
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
 
         {/* Chart */}
-        <div className="bg-white rounded-2xl shadow-sm border border-slate-100 xl:col-span-1 flex flex-col overflow-hidden">
+        <motion.div variants={itemVariants} className="bg-white rounded-2xl shadow-sm border border-slate-100 xl:col-span-1 flex flex-col overflow-hidden">
           <div className="px-6 py-5 border-b border-slate-100 flex items-center gap-3">
             <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
               <TrendingUp size={16} className="text-blue-600" />
@@ -141,10 +172,10 @@ export default function AdminDashboard() {
               <div className="flex items-center justify-center h-full text-slate-400 text-sm">No data available</div>
             )}
           </div>
-        </div>
+        </motion.div>
 
         {/* Recent Tickets */}
-        <div className="bg-white rounded-2xl shadow-sm border border-slate-100 xl:col-span-2 flex flex-col overflow-hidden">
+        <motion.div variants={itemVariants} className="bg-white rounded-2xl shadow-sm border border-slate-100 xl:col-span-2 flex flex-col overflow-hidden">
           <div className="px-6 py-5 border-b border-slate-100 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
@@ -196,9 +227,9 @@ export default function AdminDashboard() {
               </tbody>
             </table>
           </div>
-        </div>
+        </motion.div>
 
       </div>
-    </div>
+    </motion.div>
   );
 }

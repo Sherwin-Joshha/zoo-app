@@ -15,6 +15,7 @@ CREATE TABLE tickets (
   id INT AUTO_INCREMENT PRIMARY KEY,
   ticket_id CHAR(36) NOT NULL, -- UUID
   user_id INT,
+  visitor_name VARCHAR(255),
   adult_count INT NOT NULL DEFAULT 0,
   child_count INT NOT NULL DEFAULT 0,
   total_price DECIMAL(10,2) NOT NULL,
@@ -29,7 +30,7 @@ CREATE TABLE animals (
   id INT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(255) NOT NULL,
   species VARCHAR(255) NOT NULL,
-  category ENUM('bird','mammal') NOT NULL,
+  category ENUM('bird','mammal','reptile') NOT NULL,
   habitat VARCHAR(255),
   lifespan INT,
   diet VARCHAR(255),

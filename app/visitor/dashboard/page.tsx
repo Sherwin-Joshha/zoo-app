@@ -10,7 +10,17 @@ export default function VisitorDashboard() {
   const [upcomingTickets, setUpcomingTickets] = useState<any[]>([]);
 
   useEffect(() => {
-    setUserName('Visitor');
+    fetch('/api/auth/me')
+      .then(res => res.json())
+      .then(data => {
+        if (data.success && data.user) {
+          setUserName(data.user.name);
+        } else {
+          setUserName('Visitor');
+        }
+      })
+      .catch(() => setUserName('Visitor'));
+
     fetch('/api/tickets/my-tickets')
       .then(res => res.json())
       .then(data => {
@@ -212,6 +222,7 @@ export default function VisitorDashboard() {
                         VALID
                       </span>
                     </div>
+                    <p className="text-sm font-bold text-slate-800 mb-4">{t.visitor_name}</p>
                     <div className="mb-4">
                       <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Guests</p>
                       <p className="text-sm font-semibold text-slate-700">{t.adult_count} Adult{t.adult_count !== 1 ? 's' : ''}, {t.child_count} Child{t.child_count !== 1 ? 'ren' : ''}</p>

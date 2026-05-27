@@ -2,8 +2,8 @@ USE zoo_management;
 
 -- 2 users (1 visitor, 1 admin) with bcrypt hashed passwords ('password')
 INSERT INTO users (name, email, password_hash, role) VALUES
-('Admin User', 'admin@zoo.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'admin'),
-('Visitor One', 'visitor@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'visitor');
+('Raghavendra', 'admin@zoo.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'admin'),
+('Badawala', 'visitor@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'visitor');
 
 -- 5 zones
 INSERT INTO zones (zone_name, description, lat, lng) VALUES

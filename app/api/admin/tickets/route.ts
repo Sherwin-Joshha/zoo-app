@@ -14,7 +14,7 @@ export async function GET(request: Request) {
     const status = searchParams.get('status');
 
     let query = `
-      SELECT t.*, u.name as visitor_name, u.email as visitor_email 
+      SELECT t.*, COALESCE(t.visitor_name, u.name) as visitor_name, u.email as visitor_email 
       FROM tickets t
       LEFT JOIN users u ON t.user_id = u.id
       WHERE 1=1

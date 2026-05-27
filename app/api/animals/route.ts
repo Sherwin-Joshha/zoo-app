@@ -12,7 +12,7 @@ export async function GET(request: Request) {
     let query = 'SELECT * FROM animals WHERE 1=1';
     const params: any[] = [];
 
-    if (category && (category === 'bird' || category === 'mammal')) {
+    if (category && (category === 'bird' || category === 'mammal' || category === 'reptile')) {
       query += ' AND category = ?';
       params.push(category);
     }

@@ -12,7 +12,7 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json();
-    const { adult_count, child_count, visit_date } = body;
+    const { adult_count, child_count, visit_date, visitor_name } = body;
     const user_id = body.user_id || session.id;
 
     if (adult_count === undefined || child_count === undefined || !visit_date) {
@@ -30,13 +30,13 @@ export async function POST(request: Request) {
     const ticket_id = uuidv4();
     
     // Generate QR Code containing ticket_id
-    const qr_data = JSON.stringify({ ticket_id, visit_date, total_price });
+    const qr_data = JSON.stringify({ ticket_id, visit_date, total_price, visitor_name });
     const qr_code = await QRCode.toDataURL(qr_data);
 
     const [result]: any = await pool.execute(
-      `INSERT INTO tickets (ticket_id, user_id, adult_count, child_count, total_price, visit_date, qr_code, status)
-       VALUES (?, ?, ?, ?, ?, ?, ?, 'valid')`,
-      [ticket_id, user_id, adults, children, total_price, visit_date, qr_code]
+      `INSERT INTO tickets (ticket_id, user_id, visitor_name, adult_count, child_count, total_price, visit_date, qr_code, status)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'valid')`,
+      [ticket_id, user_id, visitor_name || session.name || 'Guest', adults, children, total_price, visit_date, qr_code]
     );
 
     // Distribute commission
@@ -59,6 +59,7 @@ export async function POST(request: Request) {
       id: result.insertId,
       ticket_id,
       user_id,
+      visitor_name: visitor_name || session.name || 'Guest',
       adult_count: adults,
       child_count: children,
       total_price,

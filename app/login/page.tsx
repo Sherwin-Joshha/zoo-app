@@ -23,6 +23,9 @@ export default function LoginPage() {
 
   const [activeTab, setActiveTab] = useState<'visitor' | 'admin'>('visitor');
 
+  const [isSignUp, setIsSignUp] = useState(false);
+  const [visitorName, setVisitorName] = useState('');
+
   const handleLogin = async (
     e: React.FormEvent,
     role: 'visitor' | 'admin'
@@ -54,6 +57,49 @@ export default function LoginPage() {
       setError('An unexpected error occurred');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleSignUp = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setVisitorLoading(true);
+    setVisitorError('');
+
+    try {
+      const res = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: visitorName, email: visitorEmail, password: visitorPassword, role: 'visitor' }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setVisitorError(data.error || 'Failed to sign up');
+      } else {
+        router.push('/visitor/dashboard');
+        router.refresh();
+      }
+    } catch {
+      setVisitorError('An unexpected error occurred');
+    } finally {
+      setVisitorLoading(false);
+    }
+  };
+
+  const handleGuest = async () => {
+    setVisitorLoading(true);
+    setVisitorError('');
+    try {
+      const res = await fetch('/api/auth/guest', { method: 'POST' });
+      if (!res.ok) {
+        setVisitorError('Failed to login as guest');
+      } else {
+        router.push('/visitor/dashboard');
+        router.refresh();
+      }
+    } catch {
+      setVisitorError('An unexpected error occurred');
+    } finally {
+      setVisitorLoading(false);
     }
   };
 
@@ -243,7 +289,23 @@ export default function LoginPage() {
                   </div>
                 )}
 
-                <form onSubmit={(e) => handleLogin(e, 'visitor')} className="space-y-5">
+                <form onSubmit={isSignUp ? handleSignUp : (e) => handleLogin(e, 'visitor')} className="space-y-5">
+                  {isSignUp && (
+                    <div className="space-y-1.5">
+                      <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider">
+                        Full Name
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        value={visitorName}
+                        onChange={(e) => setVisitorName(e.target.value)}
+                        className="w-full rounded-xl border-2 border-slate-200 bg-slate-50 px-4 py-3.5 text-slate-900 placeholder:text-slate-400 focus:border-green-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-green-500/10 transition-all text-sm"
+                        placeholder="John Doe"
+                      />
+                    </div>
+                  )}
+
                   <div className="space-y-1.5">
                     <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider">
                       Email Address
@@ -287,11 +349,39 @@ export default function LoginPage() {
                     className="w-full rounded-xl bg-gradient-to-r from-green-600 to-emerald-600 px-4 py-4 text-white font-bold text-sm shadow-lg shadow-green-500/20 hover:shadow-green-500/35 hover:from-green-500 hover:to-emerald-500 focus:outline-none focus:ring-4 focus:ring-green-500/25 disabled:opacity-60 transition-all flex justify-center items-center gap-2 mt-2"
                   >
                     {visitorLoading ? (
-                      <><Loader2 className="animate-spin" size={17} /> Signing in...</>
+                      <><Loader2 className="animate-spin" size={17} /> {isSignUp ? 'Signing up...' : 'Signing in...'}</>
                     ) : (
-                      'Sign In as Visitor →'
+                      isSignUp ? 'Sign Up as Visitor →' : 'Sign In as Visitor →'
                     )}
                   </button>
+                  
+                  <div className="flex flex-col items-center gap-3 mt-4">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsSignUp(!isSignUp);
+                        setVisitorError('');
+                      }}
+                      className="text-sm font-semibold text-green-700 hover:text-green-800 hover:underline transition-all"
+                    >
+                      {isSignUp ? 'Already have an account? Sign In' : 'Need an account? Sign Up'}
+                    </button>
+                    
+                    <div className="w-full flex items-center gap-3">
+                      <div className="h-px bg-slate-200 flex-1"></div>
+                      <span className="text-xs text-slate-400 font-bold uppercase">OR</span>
+                      <div className="h-px bg-slate-200 flex-1"></div>
+                    </div>
+                    
+                    <button
+                      type="button"
+                      onClick={handleGuest}
+                      disabled={visitorLoading}
+                      className="w-full rounded-xl bg-slate-100 hover:bg-slate-200 px-4 py-3 text-slate-700 font-bold text-sm border border-slate-200 transition-all flex justify-center items-center gap-2"
+                    >
+                      Continue as Guest
+                    </button>
+                  </div>
                 </form>
               </motion.div>
             )}

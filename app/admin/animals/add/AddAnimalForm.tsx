@@ -94,6 +94,7 @@ export default function AddAnimalForm({ zones }: { zones: Zone[] }) {
             <option value="">Select Category</option>
             <option value="mammal">Mammal</option>
             <option value="bird">Bird</option>
+            <option value="reptile">Reptile</option>
           </select>
         </div>
 

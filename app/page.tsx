@@ -33,16 +33,16 @@ export default function LandingPage() {
       icon: Map,
       title: 'Interactive Map',
       desc: 'Navigate the zoo effortlessly with our real-time digital map. Locate your favorite animals and plan the perfect route.',
-      color: 'from-blue-500 to-indigo-600',
-      bg: 'bg-blue-50',
+      color: 'from-amber-500 to-yellow-500',
+      bg: 'bg-amber-50',
       badge: '5 Zones',
     },
     {
       icon: Ticket,
       title: 'Easy Booking',
       desc: 'Skip the lines. Purchase tickets online, receive instant digital QR passes, and walk right through the gates.',
-      color: 'from-amber-500 to-orange-500',
-      bg: 'bg-amber-50',
+      color: 'from-emerald-500 to-teal-500',
+      bg: 'bg-emerald-50',
       badge: 'Instant QR',
     },
   ];
@@ -140,7 +140,7 @@ export default function LandingPage() {
                 <motion.div
                   whileHover={{ scale: 1.04 }}
                   whileTap={{ scale: 0.96 }}
-                  className="px-8 py-4 bg-white/90 backdrop-blur-sm text-slate-700 font-bold rounded-full shadow-sm hover:shadow-md border border-slate-200/70 flex items-center gap-2 text-base transition-all hover:bg-white"
+                  className="px-8 py-4 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-900 font-bold rounded-full shadow-lg shadow-amber-500/30 hover:shadow-amber-500/40 flex items-center gap-2 text-base transition-all"
                 >
                   Explore Features
                 </motion.div>
@@ -220,8 +220,8 @@ export default function LandingPage() {
         {/* ── CTA Banner ── */}
         <section className="py-24 relative overflow-hidden bg-gradient-to-br from-green-600 via-emerald-600 to-teal-700">
           <div className="absolute inset-0 pointer-events-none">
-            <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-white/5" />
-            <div className="absolute -bottom-20 -left-20 w-80 h-80 rounded-full bg-white/5" />
+            <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-amber-400/20 blur-2xl" />
+            <div className="absolute -bottom-20 -left-20 w-80 h-80 rounded-full bg-yellow-300/20 blur-2xl" />
           </div>
           <motion.div
             initial={{ opacity: 0, y: 24 }}
@@ -240,7 +240,7 @@ export default function LandingPage() {
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.97 }}
-                className="inline-flex items-center gap-2.5 px-10 py-4 bg-white text-emerald-800 font-black rounded-full text-base shadow-2xl hover:shadow-white/20 transition-shadow"
+                className="inline-flex items-center gap-2.5 px-10 py-4 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-900 font-black rounded-full text-base shadow-xl shadow-amber-500/20 hover:shadow-amber-500/40 transition-shadow"
               >
                 Get Started Today <ArrowRight size={18} />
               </motion.div>

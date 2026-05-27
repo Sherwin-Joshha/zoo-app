@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { CalendarDays, Users, IndianRupee, Loader2, Ticket, CheckCircle2, Sparkles } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 type TicketItem = {
   id: number;
@@ -13,6 +14,7 @@ type TicketItem = {
   qr_code: string;
   status: string;
   created_at: string;
+  visitor_name: string;
 };
 
 export default function VisitorTicketsPage() {
@@ -20,6 +22,8 @@ export default function VisitorTicketsPage() {
   const [loadingTickets, setLoadingTickets] = useState(true);
 
   const [visitDate, setVisitDate] = useState('');
+  const [visitorName, setVisitorName] = useState('');
+  const [defaultName, setDefaultName] = useState('');
   const [adults, setAdults] = useState(1);
   const [children, setChildren] = useState(0);
   const [bookingLoading, setBookingLoading] = useState(false);
@@ -56,11 +60,12 @@ export default function VisitorTicketsPage() {
       const res = await fetch('/api/tickets/book', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ adult_count: adults, child_count: children, visit_date: visitDate }),
+        body: JSON.stringify({ adult_count: adults, child_count: children, visit_date: visitDate, visitor_name: visitorName }),
       });
       const data = await res.json();
       if (res.ok) {
         setVisitDate('');
+        setVisitorName(defaultName);
         setAdults(1);
         setChildren(0);
         setSuccess(true);
@@ -93,7 +98,12 @@ export default function VisitorTicketsPage() {
         </div>
 
         {/* Booking Form */}
-        <section className="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden">
+        <motion.section 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden"
+        >
           {/* Section header */}
           <div className="bg-gradient-to-r from-green-600 to-emerald-600 px-8 py-6">
             <h2 className="text-xl font-black text-white flex items-center gap-2">
@@ -129,6 +139,21 @@ export default function VisitorTicketsPage() {
                     required
                     value={visitDate}
                     onChange={(e) => setVisitDate(e.target.value)}
+                    className="w-full px-4 py-3.5 rounded-xl border border-slate-200 focus:ring-4 focus:ring-green-500/15 focus:border-green-500 outline-none transition-all bg-slate-50 hover:bg-white text-slate-900"
+                  />
+                </div>
+
+                {/* Name */}
+                <div className="space-y-2">
+                  <label className="flex items-center gap-2 text-xs font-bold text-slate-600 uppercase tracking-wider">
+                    <Users size={14} className="text-green-600" /> Name on Ticket
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="Enter full name"
+                    value={visitorName}
+                    onChange={(e) => setVisitorName(e.target.value)}
                     className="w-full px-4 py-3.5 rounded-xl border border-slate-200 focus:ring-4 focus:ring-green-500/15 focus:border-green-500 outline-none transition-all bg-slate-50 hover:bg-white text-slate-900"
                   />
                 </div>
@@ -208,7 +233,7 @@ export default function VisitorTicketsPage() {
               </div>
             </form>
           </div>
-        </section>
+        </motion.section>
 
         {/* My Tickets */}
         <section>
@@ -235,14 +260,22 @@ export default function VisitorTicketsPage() {
               <p className="text-slate-400 text-sm">Book your first visit above and explore the zoo!</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-              {tickets.map((ticket) => (
-                <div
-                  key={ticket.id}
-                  className="bg-white rounded-2xl border border-slate-100 overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col sm:flex-row"
-                >
-                  {/* Info */}
-                  <div className="p-6 flex-1 relative">
+            <motion.div 
+              layout
+              className="grid grid-cols-1 lg:grid-cols-2 gap-5"
+            >
+              <AnimatePresence>
+                {tickets.map((ticket, i) => (
+                  <motion.div
+                    layout
+                    initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    transition={{ delay: i * 0.05, type: "spring", stiffness: 300, damping: 24 }}
+                    key={ticket.id}
+                    className="bg-white rounded-2xl border border-slate-100 overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col sm:flex-row"
+                  >
+                    {/* Info */}
+                    <div className="p-6 flex-1 relative">
                     {/* Top colored strip */}
                     <div className={`absolute top-0 left-0 right-0 h-1 ${
                       ticket.status === 'valid' ? 'bg-gradient-to-r from-green-500 to-emerald-400' :
@@ -264,6 +297,8 @@ export default function VisitorTicketsPage() {
                         {ticket.status.toUpperCase()}
                       </span>
                     </div>
+
+                    <p className="text-sm font-bold text-slate-800 mb-4">{ticket.visitor_name}</p>
 
                     <div className="grid grid-cols-2 gap-4 mb-4">
                       <div className="bg-slate-50 rounded-xl p-3 border border-slate-100">
@@ -294,9 +329,10 @@ export default function VisitorTicketsPage() {
                       </p>
                     </div>
                   </div>
-                </div>
+                </motion.div>
               ))}
-            </div>
+              </AnimatePresence>
+            </motion.div>
           )}
         </section>
 
